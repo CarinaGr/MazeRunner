@@ -178,6 +178,7 @@ class MazeSolverAlgoTeamCarina:
 
     # Defines a heuristic method used for A* algorithm
     # aGrid and bGrid are both elements [row,column]
+    # Abstand zum Ziel
     def heuristic(self, aGrid, bGrid):
         return abs(aGrid[0] - bGrid[0]) + abs(aGrid[1] - bGrid[1])
         # HINT: a good heuristic could be the distance between to grid elements aGrid and bGrid
@@ -209,8 +210,12 @@ if __name__ == '__main__':
     # HINT: in case you want to develop the solver without MQTT messages and without always
     #       loading new different mazes --> just load any maze you would like from a file
 
-    mg.loadMaze("..\\..\\MazeExamples\\Maze2.txt")
+    mg.loadMaze("..\\..\\MazeExamples\\Maze1.txt")
     mg.printMaze()
+
+    neighbours = mg.getNeighbours(2,4)
+    print(neighbours)
+
     #solutionString = mg.solveMaze()
     #print(solutionString)
    
