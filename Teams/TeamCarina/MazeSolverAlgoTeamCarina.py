@@ -21,7 +21,7 @@ class MazeSolverAlgoTeamCarina:
         self.startCol = 0 
         self.startRow = 0 
         self.endCol = 0 
-        self.endRow = 0 
+        self.endRow = 0
         self.grid=[[]] 
         print("Main Solver TeamCarina initialisiert")
 
@@ -94,6 +94,14 @@ class MazeSolverAlgoTeamCarina:
         self.grid=numpy.loadtxt(pathToConfigFile, delimiter=',',dtype=int)
         self.dimCols=self.grid.shape[0]
         self.dimRows=self.grid.shape[1]
+
+        start_arr = numpy.where(self.grid == 2)
+        self.startRow=int(start_arr[0][0])
+        self.startCol=int(start_arr[1][0])
+
+        end_arr = numpy.where(self.grid == 3)
+        self.endRow=int(end_arr[0][0])
+        self.endCol=int(end_arr[1][0])
         
 
     # clears the complete maze 
@@ -195,13 +203,14 @@ class MazeSolverAlgoTeamCarina:
 
 
 if __name__ == '__main__':
-    mg = MazeSolverAlgoTemplate()
+    mg = MazeSolverAlgoTeamCarina()
 
 
     # HINT: in case you want to develop the solver without MQTT messages and without always
     #       loading new different mazes --> just load any maze you would like from a file
 
-    #mg.loadMaze("..\\MazeExamples\\Maze1.txt")
+    mg.loadMaze("..\\..\\MazeExamples\\Maze2.txt")
+    mg.printMaze()
     #solutionString = mg.solveMaze()
     #print(solutionString)
    
