@@ -16,107 +16,163 @@ class MazeSolverAlgoTeamCarina:
     TARGET = 3      # the target/end position of the maze (green color)
 
     def __init__(self):
-        # TODO: this is you job now :-)
+        self.dimCols = 0 
+        self.dimRows = 0 
+        self.startCol = 0 
+        self.startRow = 0 
+        self.endCol = 0 
+        self.endRow = 0 
+        self.grid=[[]] 
         print("Main Solver TeamCarina initialisiert")
 
     # Setter method for the maze dimension of the rows
     def setDimRows(self, rows):
-        self.rows = rows
-        self.dimRows = rows
+         self.dimRows = rows
         
 
     # Setter method for the maze dimension of the columns
     def setDimCols(self, cols):
-        self.columns = cols
-        self.dimColumns = cols
-        
+          self.dimColumns = cols
+   
         
     # Setter method for the column of the start position 
     def setStartCol(self, col):
-        self.setStartCol = col
-        
+        self.startCol = col
+       
 
     # Setter method for the row of the start position 
     def setStartRow(self, row):
-        self.setStartRow = row
-        
+        self.startRow = row
+       
 
     # Setter method for the column of the end position 
     def setEndCol(self, col):
-        self.setEndCol = col
+        self.endCol = col
         
 
     # Setter method for the row of the end position 
     def setEndRow(self, row):
-        self.setEndRow = row
-        
+        self.endRow = row
+         
 
     # Setter method for blocked grid elements
     def setBlocked(self,row ,col):
-        # TODO: this is you job now :-)
-        pass
-
+        self.grid[row][col] = self.OBSTACLE
 
     # Start to build up a new maze
     # HINT: don't forget to initialize all member variables of this class (grid, start position, end position, dimension,...)
     def startMaze(self, columns, rows):
-        # TODO: this is you job now :-)
+        if rows == 0 and columns == 0:
+            self.startCols = 0 
+            self.startRows = 0 
+            self.endCols = 0 
+            self.endRows = 0 
+
+
+        self.grid=[[]] 
+
         #HINT: populate grid with dimension row,column with zeros
-        print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb")
+        if columns>0 and rows>0:
+            self.grid = numpy.empty((rows, columns), dtype=int)
+            for i in range(rows):
+                for j in range(columns):
+                    self.grid[i][j]= self.EMPTY
 
     # Define what shall happen after the full information of a maze has been received
     def endMaze(self):
-        # TODO: this is you job now :-)
+        self.grid[self.startRow][self.startCol] = self.START
+        self.grid[self.endRow][self.endCol] = self.TARGET
+
         # HINT: did you set start position and end position correctly?
-        pass
 
     # just prints a maze on the command line
     def printMaze(self):
-        # TODO: this is you job now :-)
-        pass
+        print(self.grid)
 
     # loads a maze from a file pathToConfigFile
     def loadMaze(self,pathToConfigFile):
-        # check whether a function numpy.loadtxt() could be useful
-        # TODO: this is you job now :-)
-        pass
+        self.grid=numpy.loadtxt(pathToConfigFile, delimiter=',',dtype=int)
+        self.dimCols=self.grid.shape[0]
+        self.dimRows=self.grid.shape[1]
+        
 
     # clears the complete maze 
     def clearMaze(self):
-        # TODO: this is you job now :-)
-        pass
+        self.dimCols = 0
+        self.dimRows = 0
+        self.startMaze(0,0)
   
     # Decides whether a certain row,column grid element is inside the maze or outside
     def isInGrid(self,row,column):
-        # TODO: this is you job now :-)
-        pass
+        if row < 0:
+            return False
+
+        if column < 0:
+            return False
+
+        if row >= self.grid.shape[0]:
+            return False
+
+        if column >= self.grid.shape[1]:
+            return False
+
+        return True
 
 
     # Returns a list of all grid elements neighboured to the grid element row,column
     def getNeighbours(self,row,column):
-        # TODO: this is you job now :-)
-        # TODO: Add a Unit Test Case --> Very good example for boundary tests and condition coverage
-        pass
+        neighbours = []
+
+        # no neighbours for out-of-grid elements
+        if self.isInGrid(row,column) == False:
+            return neighbours
+
+        # no neighbours for blocked grid elements
+        if self.grid[row,column] == self.OBSTACLE:
+            return neighbours
+    
+        nextRow = row + 1    
+        if (self.isInGrid(nextRow,column) is True and self.grid[nextRow][column] != self.OBSTACLE):
+            neighbours.append([nextRow,column])
+
+        previousRow = row - 1    
+        if (self.isInGrid(previousRow,column) is True and self.grid[previousRow][column] != self.OBSTACLE):
+            neighbours.append([previousRow,column])
+
+        nextColumn = column + 1    
+        if (self.isInGrid(row,nextColumn) is True and self.grid[row][nextColumn] != self.OBSTACLE):
+            neighbours.append([row,nextColumn])
+
+        previousColumn = column - 1    
+        if (self.isInGrid(row,previousColumn) is True and self.grid[row][previousColumn] != self.OBSTACLE):
+            neighbours.append([row,previousColumn])
+
+        return neighbours
 
     # Gives a grid element as string, the result should be a string row,column
     def gridElementToString(self,row,col):
-        # TODO: this is you job now :-)
         # HINT: this method is used as primary key in a lookup table
-        pass
+        result = ""
+        result += str(row)
+        result += ","
+        result += str(col)
+        return result
+        
     
     # check whether two different grid elements are identical
     # aGrid and bGrid are both elements [row,column]
     def isSameGridElement(self, aGrid, bGrid):
-        # TODO: this is you job now :-)
-        pass
+        if (aGrid[0] == bGrid[0] and aGrid[1] == bGrid[1]):
+            return True
+
+        return False
 
 
     # Defines a heuristic method used for A* algorithm
     # aGrid and bGrid are both elements [row,column]
     def heuristic(self, aGrid, bGrid):
-        # TODO: this is you job now :-)
+        return abs(aGrid[0] - bGrid[0]) + abs(aGrid[1] - bGrid[1])
         # HINT: a good heuristic could be the distance between to grid elements aGrid and bGrid
-        pass
 
     # Generates the resulting path as string from the came_from list
     def generateResultPath(self,came_from):

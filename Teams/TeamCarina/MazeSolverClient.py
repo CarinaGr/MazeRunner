@@ -19,8 +19,7 @@ class MazeSolverClient:
 
     # initialize the MQTT client
     def __init__(self,master):
-        # TODO: this is you job now :-)
-
+        
         print("Constructor Team Carina MQTT Client")
         self.master=master
 
@@ -51,49 +50,47 @@ class MazeSolverClient:
 
         if topic=="/maze":
             if payload == "clear":
-                #self.solver.clearMaze()
-                pass
+                self.solver.clearMaze()
             elif payload == "start":
                 self.solver.startMaze(0,0)
             elif payload == "solve":
-                #self.solveMaze()
-                pass               
+                self.solveMaze()          
             elif payload == "end":
-                #self.solver.endMaze()
-                #self.solver.printMaze()
-                pass
+                self.solver.endMaze()
+                print("folgende Maze wurde über MQTT empfangen\n")
+                self.solver.printMaze()
+                
             else:
                 pass
         elif topic=="/maze/dimRow":
-            #self.solver.setDimRowsCmd(int(payload))
-            #self.solver.startMaze(self.solver.dimRows, self.solver.dimColumns)
-            pass
+            self.solver.setDimRows(int(payload))
+            self.solver.startMaze(self.solver.dimRows, self.solver.dimColumns)
+            
         elif topic=="/maze/dimCol":
-            #self.solver.setDimColsCmd(int(payload))
-            #self.solver.startMaze(self.solver.dimRows, self.solver.dimColumns)
-            pass
+            self.solver.setDimCols(int(payload))
+            self.solver.startMaze(self.solver.dimRows, self.solver.dimColumns)
+            
         elif topic=="/maze/startCol":
-            #self.solver.setStartColCmd(int(payload))
-            pass
+            self.solver.setStartCol(int(payload))
+            
         elif topic=="/maze/startRow":
-            #self.solver.setStartRowCmd(int(payload))
-            pass
+            self.solver.setStartRow(int(payload))
+        
         elif topic=="/maze/endCol":
-            #self.solver.setEndColCmd(int(payload))
-            pass
+            self.solver.setEndCol(int(payload))
+            
         elif topic=="/maze/endRow":
-            #self.solver.setEndRowCmd(int(payload))
-            pass
+            self.solver.setEndRow(int(payload))
+            
         elif topic=="/maze/blocked":
             cell = payload.split(",")
-            #self.solver.setBlocked(int(cell[0]),int(cell[1]))
-            pass
+            self.solver.setBlocked(int(cell[0]),int(cell[1]))
+           
         else:
             pass
 
     # Implement MQTT onConnecr function
     def onConnect(self, master, obj, flags, rc):
-        # TODO: this is you job now :-)
         # HINT: it might be a good idea to look into file Framework\Test\test_mqtt_subscriber.py
         self.master.subscribe("/maze" )
         self.master.subscribe("/maze/dimRow" )
@@ -103,14 +100,17 @@ class MazeSolverClient:
         self.master.subscribe("/maze/endCol" )
         self.master.subscribe("/maze/endRow" )
         self.master.subscribe("/maze/blocked" )
+        print("Connnect to mqtt-broker")
     
     # Initiate the solving process of the maze solver
     def solveMaze(self):
-        # TODO: this is you job now :-)
-
+        for step in self.solver.solveMaze():
+            step_str = '{},{}'.format(step[0],step[1])
+           
+            self.publish("/maze/go" , step_str)
         #HINT:  don't forget to publish the results, e.g. 
         #self.publish("/maze/go" , resultString)
-        pass
+     
 
     
 if __name__ == '__main__':
