@@ -35,9 +35,9 @@ class MazeSolverClient:
 
     # Implement MQTT publishing function
     def publish(self, topic, message=None, qos=0, retain=False):
-        # TODO: this is you job now :-)
+        print("Published message: " , topic , " --> " , message)
+        self.master.publish(topic,message,qos,retain)
         # HINT: it might be a good idea to look into file Framework\Test\test_mqtt_publisher.py
-        pass
 
 
     # Implement MQTT receive message function

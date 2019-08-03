@@ -250,6 +250,8 @@ class MazeSolverAlgoTeamCarina:
         path.append(start)
         path.reverse()
         print(path)
+        
+        return path
 
 
 
