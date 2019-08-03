@@ -169,6 +169,7 @@ class MazeSolverAlgoTeamCarina:
     
     # check whether two different grid elements are identical
     # aGrid and bGrid are both elements [row,column]
+    # ist row and column the same
     def isSameGridElement(self, aGrid, bGrid):
         if (aGrid[0] == bGrid[0] and aGrid[1] == bGrid[1]):
             return True
@@ -185,9 +186,29 @@ class MazeSolverAlgoTeamCarina:
 
     # Generates the resulting path as string from the came_from list
     def generateResultPath(self,came_from):
-        # TODO: this is you job now :-)
+        result_path = []
         # HINT: this method is a bit tricky as you have to invert the came_from list (follow the path from end to start)
-        pass
+
+
+        #############################
+        # Here Creation of Path starts
+        #############################
+        startKey = self.gridElementToString(self.startRow , self.startCol)
+        currentKey = self.gridElementToString(self.endRow , self.endCol)
+        path = []
+        while currentKey != startKey: 
+            path.append(currentKey)
+            current = came_from[currentKey]
+            currentKey = self.gridElementToString(current[0],current[1])
+
+        path.append(startKey)
+        path.reverse()
+        #############################
+        # Here Creation of Path ends
+        #############################        
+
+
+
 
     #############################
     # Definition of Maze solver algorithm
@@ -195,8 +216,42 @@ class MazeSolverAlgoTeamCarina:
     # implementation taken from https://www.redblobgames.com/pathfinding/a-star/introduction.html
     #############################
     def myMazeSolver(self):
-        # TODO: this is you job now :-)
-        pass
+
+        #############################
+        # Here Breadth First starts
+        #############################
+        start = [self.startRow,self.startCol]
+        frontier = queue.Queue()
+        frontier.put(start)
+        startKey = self.gridElementToString(self.startRow , self.startCol)
+
+        came_from = {}
+        came_from[startKey] = None
+        while not frontier.empty():
+            current = frontier.get()
+
+            for next in self.getNeighbours(current[0],current[1]):
+                nextKey = self.gridElementToString(next[0] , next[1])
+                if nextKey not in came_from:
+                    frontier.put(next)
+                    came_from[nextKey] = current
+
+        #############################
+        # Here Breadth First ends
+        #############################
+
+        current = [self.endRow , self.endCol]
+        start = [self.startRow , self.startCol]
+        path = []
+        while current != start:
+            path.append(current)
+            current = came_from[self.gridElementToString(current[0],current[1])]
+
+        path.append(start)
+        path.reverse()
+        print(path)
+
+
 
     # Command for starting the solving procedure
     def solveMaze(self):
@@ -215,7 +270,7 @@ if __name__ == '__main__':
 
     neighbours = mg.getNeighbours(2,4)
     print(neighbours)
-
+    mg.myMazeSolver()
     #solutionString = mg.solveMaze()
     #print(solutionString)
    
