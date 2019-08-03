@@ -220,24 +220,57 @@ class MazeSolverAlgoTeamCarina:
         #############################
         # Here Breadth First starts
         #############################
-        start = [self.startRow,self.startCol]
-        frontier = queue.Queue()
-        frontier.put(start)
-        startKey = self.gridElementToString(self.startRow , self.startCol)
+        #start = [self.startRow,self.startCol]
+        #frontier = queue.Queue()
+        #frontier.put(start)
+        #startKey = self.gridElementToString(self.startRow , self.startCol)
 
-        came_from = {}
-        came_from[startKey] = None
-        while not frontier.empty():
-            current = frontier.get()
+        #came_from = {}
+        #came_from[startKey] = None
+        #while not frontier.empty():
+            #current = frontier.get()
 
-            for next in self.getNeighbours(current[0],current[1]):
-                nextKey = self.gridElementToString(next[0] , next[1])
-                if nextKey not in came_from:
-                    frontier.put(next)
-                    came_from[nextKey] = current
+            #for next in self.getNeighbours(current[0],current[1]):
+                #nextKey = self.gridElementToString(next[0] , next[1])
+                #if nextKey not in came_from:
+                    #frontier.put(next)
+                    #came_from[nextKey] = current
 
         #############################
         # Here Breadth First ends
+        #############################
+
+
+        #############################
+        # Here A* starts
+        #############################
+        start = [self.startRow,self.startCol]
+        frontier = queue.PriorityQueue()
+        frontier.put(start, 0)
+        startKey = self.gridElementToString(self.startRow , self.startCol)
+
+        came_from = {}
+        cost_so_far = {}
+        came_from[startKey] = None
+        cost_so_far[startKey] = 0
+        while not frontier.empty():
+            current = frontier.get()
+
+            if current == goal:
+                break
+                
+            for next in self.getNeighbours(current[0],current[1]):
+                new_cost = cost_so_far[current] + 1
+                nextKey = self.gridElementToString(next[0] , next[1])
+              
+                if nextKey not in cost_so_far or new_cost < cost_so_far[nextKey]:
+                    cost_so_far[next] = new_cost
+                    priority = new_cost + self.heuristic(endPoint, next)
+                    frontier.put(next, priority)
+                    came_from[nextKey] = current
+
+        #############################
+        # Here A* ends
         #############################
 
         current = [self.endRow , self.endCol]

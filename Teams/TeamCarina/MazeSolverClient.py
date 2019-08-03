@@ -11,7 +11,7 @@ from MazeSolverAlgoTeamCarina import MazeSolverAlgoTeamCarina
 if "MQTTSERVER" in os.environ and os.environ['MQTTSERVER']:
     mqtt_server = os.environ['MQTTSERVER']
 else:
-    mqtt_server = "127.0.0.1"
+    mqtt_server = "127.0.0.1" #lokaler Server
 
 # HINT: it might be a good idea to copy this file into your team folder, e.g. TeamA
 # HINT: it might be good idea to rename both the file and the class name
@@ -42,7 +42,6 @@ class MazeSolverClient:
 
     # Implement MQTT receive message function
     def onMessage(self, master, obj, msg):
-        # TODO: this is you job now :-)
         # HINT: it might be a good idea to look into file Framework\Test\test_mqtt_subscriber.py
         topic = str(msg.topic)
         payload = str(msg.payload.decode("utf-8"))
